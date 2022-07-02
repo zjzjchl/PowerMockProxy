@@ -1,0 +1,33 @@
+{
+  "name": "powermockproxy",
+  "version": "1.0.0",
+  "description": "This is used to manager protos of powermock used.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/webpack/bin/webpack.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zjzjchl/PowerMockProxy.git"
+  },
+  "keywords": [
+    "powermock",
+    "mockserver"
+  ],
+  "author": "zjzjchl@icloud.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zjzjchl/PowerMockProxy/issues"
+  },
+  "homepage": "https://github.com/zjzjchl/PowerMockProxy#readme",
+  "dependencies": {
+    "config": "^3.3.7",
+    "express": "^4.18.1",
+    "moment": "^2.29.3"
+  },
+  "devDependencies": {
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  }
+}
