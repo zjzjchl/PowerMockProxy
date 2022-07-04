@@ -1,0 +1,8 @@
+{
+  "mongodb": {
+    "url": "mongodb://localhost:27017",
+    "dbName": "powermock"
+  },
+  "jwt-secret": "ac20556f2f6166f8a9c257c4ceaa7c19",
+  "resources-folder-base-path": "./public/resources"
+}
