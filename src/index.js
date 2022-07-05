@@ -1,25 +1,32 @@
 const Config = require('config');
+const bodyParser = require('body-parser');
 const { expressjwt } = require('express-jwt');
 const express = require('express');
+
+
+const { App } = require('./biz/index');
+
 const app = express();
+
+app.use(bodyParser.json());
 
 const port = 3000;
 
 const JwtSecret = Config.get('jwt-secret');
 const FilterUrls = ['/account/login', '/helloworld'];
 
-app.use(expressjwt({ secret: JwtSecret, algorithms: ['HS256'] }).unless({
-    path: FilterUrls,
-    custom: function (req) {
-        if (FilterUrls.includes(req.url)) {
-            return true;
-        }
-        if (req.url.startsWith('/assets')) {
-            return true;
-        }
-        return false;
-    }
-}));
+// app.use(expressjwt({ secret: JwtSecret, algorithms: ['HS256'] }).unless({
+//     path: FilterUrls,
+//     custom: function (req) {
+//         if (FilterUrls.includes(req.url)) {
+//             return true;
+//         }
+//         if (req.url.startsWith('/assets')) {
+//             return true;
+//         }
+//         return false;
+//     }
+// }));
 
 
 function Authentication(url) {
@@ -47,6 +54,23 @@ app.get('/helloworld', (req, res) => {
     res.send('Hello World');
 });
 
+
+app.post('/app', async (req, res)=>{
+    await App.addApp(req, res);
+    res.json(req.body);
+});
+
+app.get('/app', async (req, res)=>{
+    
+});
+
+app.put('/app', async (req, res)=>{
+    
+});
+
+app.delete('/app', async (req, res)=>{
+    
+});
 
 app.use(function (err, req, res, next) {
     console.log(err);

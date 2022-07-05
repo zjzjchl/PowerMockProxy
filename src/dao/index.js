@@ -1,1 +1,1 @@
-exports.AppDao = require('./app/index');
+exports.AppDao = require('./app/index').AppDao;
