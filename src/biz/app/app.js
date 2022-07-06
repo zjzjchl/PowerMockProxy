@@ -20,7 +20,7 @@ exports.deleteApp = async function (req, res) {
 
 exports.allAppByParams = async function (req, res) {
   let dao = new AppDao();
-  let result = await dao.allByParams(req.body);
+  let result = await dao.allByParams(req.params);
   return result;
 };
 

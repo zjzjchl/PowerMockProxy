@@ -4,7 +4,7 @@ const { expressjwt } = require('express-jwt');
 const express = require('express');
 
 
-const { App } = require('./biz/index');
+const { App, ApiGroup } = require('./biz/index');
 
 const app = express();
 
@@ -61,7 +61,13 @@ app.post('/app', async (req, res)=>{
 });
 
 app.get('/app', async (req, res)=>{
-    
+    if (req.params.id) {
+        let records = await App.allAppByParams(req, res);
+        res.json(records);
+    } else {
+        let records = await App.allApp(req, res);
+        res.json(records);
+    }
 });
 
 app.put('/app', async (req, res)=>{
@@ -71,6 +77,22 @@ app.put('/app', async (req, res)=>{
 app.delete('/app', async (req, res)=>{
     
 });
+
+app.post('/apigroup', async (req, res)=>{
+    await ApiGroup.addApiGroup(req, res);
+    res.json(req.body);
+});
+
+app.get('/apigroup', async (req, res)=>{
+    if (req.params.id) {
+        let records = await ApiGroup.getAPiGroup(req, res);
+        res.json(records);
+    } else {
+        let records = await ApiGroup.allApiGroup(req, res);
+        res.json(records);
+    }
+});
+
 
 app.use(function (err, req, res, next) {
     console.log(err);
