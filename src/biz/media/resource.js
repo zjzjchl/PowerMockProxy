@@ -4,6 +4,14 @@ const ResourcesFolderBasePath = require('config').get('resources-folder-base-pat
 const { ResourceDao } = require('../../dao/index.js');
 const { ApiGroup } = require('../../biz/app/index');
 
+
+exports.getProto = async function (req, res) {
+  console.log(req.query);
+  const content = fs.readFileSync(req.query.path);
+  return content;
+}
+
+
 exports.addResource = async function (req, res) {
   // 生成multiparty对象，并配置上传目标路径
   let uploadDir = `${ResourcesFolderBasePath}`;

@@ -106,6 +106,11 @@ app.post('/upload', async (req, res)=>{
     await Resource.addResource(req, res);
 });
 
+app.get('/proto', async (req, res)=>{
+    let content = await Resource.getProto(req, res);
+    res.json({content});
+});
+
 
 app.use(function (err, req, res, next) {
     console.log(err);
