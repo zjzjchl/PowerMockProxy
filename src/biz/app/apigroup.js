@@ -8,6 +8,13 @@ exports.addApiGroup = async function (req, res) {
   await dao.add(req.body);
 };
 
+exports.addApiGroupWithId = async function (req, res) {
+  req.body.timestamp = moment().valueOf();
+  let dao = new ApiGroupDao();
+  await dao.addWithId(req.body);
+};
+
+
 exports.updateApiGroup = async function (req, res) {
   let dao = new ApiGroupDao();
   await dao.update(req.body);

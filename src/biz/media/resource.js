@@ -1,9 +1,8 @@
 const fs = require('fs');
-const moment = require('moment');
 const multiparty = require('multiparty');
 const ResourcesFolderBasePath = require('config').get('resources-folder-base-path');
 const { ResourceDao } = require('../../dao/index.js');
-// const BaseAssetsUrl = require('config').get('base-assets-url');
+const { ApiGroup } = require('../../biz/app/index');
 
 exports.addResource = async function (req, res) {
   // 生成multiparty对象，并配置上传目标路径
@@ -27,26 +26,20 @@ exports.addResource = async function (req, res) {
           }
           let targetPath = targetDir + element.originalFilename;
           fs.renameSync(element.path, targetPath);
-          // let dao = new ResourceDao();
-          // req.body.timestamp = moment().valueOf();
-          // req.body.path = targetPath;
-          // req.body.size = element.size;
-          // req.body.url = `${BaseAssetsUrl}/${req.body.oId}/${folder}${element.originalFilename}`;
-          // dao.add(req.body);
+          
+          // _id, aid, name, timestamp, type,  path, size, url
+          req.body.type = "grpc";
+          req.body.name = element.originalFilename;
+          req.body.path = targetPath; 
+          req.body.size = element.size;
+          ApiGroup.addApiGroupWithId(req, res);
         });
       }
-      // res.json({
-      //   "success": true,
-      //   "message": "上传成功",
-      //   "id": req.body.id,
-      //   "timestamp": req.body.timestamp,
-      //   "folder": req.body.folder,
-      //   "path": req.body.path,
-      //   "size": req.body.size
-      //   // "url": "https://img.alicdn.com/tps/TB19O79MVXXXXcZXVXXXXXXXXXX-1024-1024.jpg",             // 返回结果
-      //   // "imgURL": "",         // 图片预览地址 (非必须)
-      //   // "downloadURL": ""    // 图片下载地址 (非必须)
-      // });
+      res.json({
+        "success": true,
+        "message": "上传成功",
+        "data": req.body
+      });
     } else {
       res.json({
         "success": false,

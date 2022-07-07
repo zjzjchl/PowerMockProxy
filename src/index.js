@@ -104,7 +104,6 @@ app.delete('/apigroup', async (req, res)=>{
 
 app.post('/upload', async (req, res)=>{
     await Resource.addResource(req, res);
-    res.json({});
 });
 
 

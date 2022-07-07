@@ -1,3 +1,4 @@
+const md5 = require('md5-node');
 const ObjectId = require('mongodb').ObjectId;
 const { getDB } = require('../client');
 const Dao = require('../dao.js');
@@ -13,6 +14,15 @@ ApiGroupDao.prototype.add = async function (apigroup) {
   let set = this.flattenData(apigroup, []);
   const db = await getDB();
   await db.collection('apigroup').insertOne(set);
+};
+
+ApiGroupDao.prototype.addWithId = async function (apigroup) {
+  let id = md5(apigroup.name);
+  apigroup._id = new ObjectId(id.substring(0, 24));
+  // let set = this.flattenData(apigroup, []);
+  // const db = await getDB();
+  // await db.collection('apigroup').insertOne(set);
+  await this.update(apigroup);
 };
 
 ApiGroupDao.prototype.delete = async function (apigroup) {
