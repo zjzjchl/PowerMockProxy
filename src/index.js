@@ -111,6 +111,15 @@ app.get('/proto', async (req, res)=>{
     res.json({content});
 });
 
+app.get('/grpcmock', async (req, res)=>{
+    let content = await Resource.getGrpcMock(req, res);
+    res.json({content});
+});
+
+app.post('/grpcmock', async (req, res)=>{
+    await Resource.addGrpcMock(req, res);
+    res.json(req.body);
+});
 
 app.use(function (err, req, res, next) {
     console.log(err);

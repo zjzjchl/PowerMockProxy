@@ -1,16 +1,35 @@
+const iconv = require('iconv-lite');
 const fs = require('fs');
 const multiparty = require('multiparty');
 const ResourcesFolderBasePath = require('config').get('resources-folder-base-path');
 const { ResourceDao } = require('../../dao/index.js');
 const { ApiGroup } = require('../../biz/app/index');
-
+const encoding = 'gbk';
+const binaryEncoding = 'binary';
 
 exports.getProto = async function (req, res) {
-  console.log(req.query);
   const content = fs.readFileSync(req.query.path);
   return content;
 }
 
+exports.getGrpcMock = async function (req, res) {
+  let path = req.query.path.replace('.proto', '.yaml');
+  if (!fs.existsSync(path)) {
+    fs.writeFileSync(path, "");
+  }
+  const content = fs.readFileSync(path);
+  return content;
+}
+
+exports.addGrpcMock = async function (req, res) {
+  let path = req.body.path.replace('.proto', '.yaml');
+  if (!fs.existsSync(path)) {
+    fs.writeFileSync(path, "");
+  }
+  const content = iconv.decode(Buffer.from(req.body.content, binaryEncoding), encoding);
+  
+  fs.writeFileSync(path, content);
+}
 
 exports.addResource = async function (req, res) {
   // 生成multiparty对象，并配置上传目标路径
