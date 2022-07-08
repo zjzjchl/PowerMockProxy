@@ -4,6 +4,7 @@ const multiparty = require('multiparty');
 const ResourcesFolderBasePath = require('config').get('resources-folder-base-path');
 const { ResourceDao } = require('../../dao/index.js');
 const { ApiGroup } = require('../../biz/app/index');
+const child_process = require('child_process');
 const encoding = 'gbk';
 const binaryEncoding = 'binary';
 
@@ -29,6 +30,10 @@ exports.addGrpcMock = async function (req, res) {
   const content = iconv.decode(Buffer.from(req.body.content, binaryEncoding), encoding);
   
   fs.writeFileSync(path, content);
+
+  // 然后调用载入脚本
+  let params = {path};
+  child_process.spawn('node', [__dirname + '/load.js', JSON.stringify(params)]);
 }
 
 exports.addResource = async function (req, res) {
