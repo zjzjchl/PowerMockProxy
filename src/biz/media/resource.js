@@ -65,6 +65,11 @@ exports.addResource = async function (req, res) {
           req.body.path = targetPath; 
           req.body.size = element.size;
           ApiGroup.addApiGroupWithId(req, res);
+
+          // 然后调用文件复制脚本
+          let params = {source: req.body.path, target: `${req.body.name}`};
+          child_process.spawn('node', [__dirname + '/serve.js', JSON.stringify(params)]);
+
         });
       }
       res.json({

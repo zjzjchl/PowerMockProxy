@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package examples.play.api;
+option go_package = "github.com/bilibili-base/powermock/examples/helloWorld/apis;apis";
+
+service Play {
+    rpc PlayPingPong(PlayPingPongRequest) returns (PlayPingPongResponse);
+}
+
+message PlayPingPongRequest {
+    string message = 2;
+}
+
+message PlayPingPongResponse {
+    string message = 2;
+}
