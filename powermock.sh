@@ -18,9 +18,28 @@ powermock-v8-linux-amd64 serve --config.file config.yaml &
 
 # 查看新启用的powermock进程
 PID=$(pgrep powermock)
-echo "new pic : ${PID}"
+echo "new pid : ${PID}"
 
 # 重新载入所有的api
+cd /root/PowerMockProxy/public/resources/
+pwd
+FILES=$(ls ./)
+for FILE in ${FILES}
+do
+  if [ -d "${FILE}" ];then
+    YAMLS=$(ls ./${FILE}/)
+    for YAML in ${YAMLS}
+    do
+      if [ -f "./${FILE}/${YAML}" ];then
+        SUFFIX="${YAML##*.}"
+        if [ "${SUFFIX}" = "yaml" ];then
+          echo ./${FILE}/${YAML}
+          powermock-v8-linux-amd64 load --address=127.0.0.1:30000 ./${FILE}/${YAML}
+        fi
+      fi
+    done
+  fi
+done
 
 
 echo 'pileline finished!'
