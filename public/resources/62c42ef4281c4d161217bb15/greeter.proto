@@ -5,6 +5,7 @@ option go_package = "github.com/bilibili-base/powermock/examples/helloWorld/apis
 
 service Greeter {
     rpc Hello(HelloRequest) returns (HelloResponse);
+    rpc Hi(HelloRequest) returns (HelloResponse);
 }
 
 message HelloRequest {
