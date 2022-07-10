@@ -1,7 +1,6 @@
 const protoLoader = require('@grpc/proto-loader');
 const grpcLibrary = require('@grpc/grpc-js');
 
-
 exports.isService= function(object) {
   for (const key in object) {
     if (Object.hasOwnProperty.call(object, key)) {
@@ -26,7 +25,17 @@ exports.getApisOfService = function(object) {
   return apis;
 }
 
-exports.getTreeOfProtoFile = async function(protoFileName, options={}) {
+exports.getTreeOfProtoFile = async function(req, res) {
+  console.log(req.query);
+  if (!req.query) {
+    return [];
+  }
+  if (!req.query.data) {
+    return [];
+  }
+  let params = JSON.parse(req.query.data);
+  let protoFileName = `${params.path}`;
+  let options = {};
   let tree = [];
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   for (const key in packageDefinition) {
@@ -39,7 +48,7 @@ exports.getTreeOfProtoFile = async function(protoFileName, options={}) {
       // 是否是一个服务
       if (exports.isService(element)) {
         // _id, aid, type
-        let node = {name: key, children: [], type: 'grpc_service'};
+        let node = {name: key, children: [], type: 'grpc_service', gid: params._id, aid: params.aid};
         let apis = exports.getApisOfService(element);
         node.children = apis;
         tree.push(node);

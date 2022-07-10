@@ -4,7 +4,7 @@ const { expressjwt } = require('express-jwt');
 const express = require('express');
 
 
-const { App, ApiGroup, Resource } = require('./biz/index');
+const { App, ApiGroup, Resource, GrpcLoader } = require('./biz/index');
 
 const app = express();
 
@@ -119,6 +119,11 @@ app.get('/grpcmock', async (req, res)=>{
 app.post('/grpcmock', async (req, res)=>{
     await Resource.addGrpcMock(req, res);
     res.json(req.body);
+});
+
+app.get('/tree', async (req, res)=>{
+    let tree = await GrpcLoader.getTreeOfProtoFile(req, res);
+    res.json(tree);
 });
 
 app.use(function (err, req, res, next) {
