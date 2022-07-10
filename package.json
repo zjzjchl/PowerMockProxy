@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/zjzjchl/PowerMockProxy#readme",
   "dependencies": {
+    "@grpc/grpc-js": "^1.6.7",
+    "@grpc/proto-loader": "^0.6.13",
     "body-parser": "^1.20.0",
     "config": "^3.3.7",
     "express": "^4.18.1",
@@ -32,7 +34,8 @@
     "moment": "^2.29.3",
     "mongodb": "^4.7.0",
     "multiparty": "^4.2.3",
-    "node-rsa": "^1.1.1"
+    "node-rsa": "^1.1.1",
+    "protobufjs": "^7.0.0"
   },
   "devDependencies": {
     "webpack": "^5.64.4",
