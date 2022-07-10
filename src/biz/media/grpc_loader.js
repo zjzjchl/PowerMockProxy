@@ -28,10 +28,10 @@ exports.getApisOfService = function(object) {
 exports.getTreeOfProtoFile = async function(req, res) {
   console.log(req.query);
   if (!req.query) {
-    return [];
+    return {};
   }
   if (!req.query.data) {
-    return [];
+    return {};
   }
   let params = JSON.parse(req.query.data);
   let protoFileName = `${params.path}`;
@@ -56,7 +56,7 @@ exports.getTreeOfProtoFile = async function(req, res) {
     }
   }
   // console.log(JSON.stringify(tree));
-  return tree;
+  return {tree, aid: params.aid, gid: params._id};
 }
 
 // exports.getTreeOfProtoFile("/root/PowerMockProxy/public/resources/62c42ef4281c4d161217bb15/greeter.proto");
