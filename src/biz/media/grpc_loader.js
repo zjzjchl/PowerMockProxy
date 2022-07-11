@@ -1,5 +1,7 @@
 const protoLoader = require('@grpc/proto-loader');
 const grpcLibrary = require('@grpc/grpc-js');
+const protobufjs = require('protobufjs');
+const fs = require("fs");
 
 exports.isService= function(object) {
   for (const key in object) {
@@ -25,6 +27,22 @@ exports.getApisOfService = function(object) {
   return apis;
 }
 
+exports.getMessagesOfPackageDefinition = function(packageDefinition) {
+  let messages = {};
+  for (const key in packageDefinition) {
+    if (Object.hasOwnProperty.call(packageDefinition, key)) {
+      const element = packageDefinition[key];
+      // 协议描述
+      if (!element.type){
+        continue;
+      }
+      const type = element.type;
+      console.log(type.field, type.name, type.nestedType);
+    }
+  }
+  return messages;
+}
+
 exports.getTreeOfProtoFile = async function(req, res) {
   console.log(req.query);
   if (!req.query) {
@@ -35,9 +53,14 @@ exports.getTreeOfProtoFile = async function(req, res) {
   }
   let params = JSON.parse(req.query.data);
   let protoFileName = `${params.path}`;
-  let options = {};
+  let options = {json: true};
   let tree = [];
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
+
+  const messages = exports.getMessagesOfPackageDefinition(packageDefinition);
+  console.log(messages);
+
+  // const grpcObject = grpcLibrary.loadPackageDefinition(packageDefinition);
   for (const key in packageDefinition) {
     if (Object.hasOwnProperty.call(packageDefinition, key)) {
       const element = packageDefinition[key];
@@ -59,4 +82,12 @@ exports.getTreeOfProtoFile = async function(req, res) {
   return {tree, aid: params.aid, gid: params._id};
 }
 
-// exports.getTreeOfProtoFile("/root/PowerMockProxy/public/resources/62c42ef4281c4d161217bb15/greeter.proto");
+// exports.getTreeOfProtoFile({query: { data: '{"_id":"b12665d2b48e499580458861","aid":"62c42ef4281c4d161217bb15","name":"apis.proto","path":"./public/resources/62c42ef4281c4d161217bb15/apis.proto","size":3049,"timestamp":1657173777706,"type":"grpc"}'}}, null);
+
+// let Root = protobufjs.loadSync('./public/resources/62c42ef4281c4d161217bb15/apis.proto');
+// let Message = Root.lookupType("powermock.apis.v1alpha1.MockAPI");
+// const types = Message.toJSON();
+
+// console.log(types);
+
+

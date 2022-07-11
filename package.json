@@ -28,6 +28,7 @@
     "config": "^3.3.7",
     "express": "^4.18.1",
     "express-jwt": "^7.7.5",
+    "google-protobuf": "^3.20.1",
     "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^8.5.1",
     "md5-node": "^1.0.1",
@@ -35,7 +36,7 @@
     "mongodb": "^4.7.0",
     "multiparty": "^4.2.3",
     "node-rsa": "^1.1.1",
-    "protobufjs": "^7.0.0"
+    "protobufjs": "^6.7.0"
   },
   "devDependencies": {
     "webpack": "^5.64.4",

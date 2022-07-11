@@ -5,35 +5,6 @@ option go_package = "apis/v1alpha1;v1alpha1";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 
-// *
-// * [ Conditions ]
-// ** Javascript:
-// function (request: Request): bool {}
-// ** Target:
-// Header, Body, Query, Param
-// ** Operator(WithNot):
-// Exists, Contains, Equal, MatchRegexp, ><=,
-// Match   xxx|xxx|xxx|xxx
-// ---
-// * [ Placeholder ]
-// {{ $request.header.userAgent }}
-// {{ $request.body.xxxxx }}
-// {{ $request.ip }}
-// {{ $fake.nickname }}
-// {{ $fake.phoneNumber }}   lk
-// {{ $fake.address }}
-// {{ $fake.imageUrl }}
-// Go Template ?
-// ...
-//
-// ---
-// * [ Response ]
-// Header
-// Body
-// Grpc Code
-// Latency
-// ---
-// * //
 message MockAPI {
     message Condition {
         message SimpleCondition {
@@ -65,7 +36,6 @@ message MockAPI {
         message ScriptResponse {
             string lang = 1;
             string content = 2;
-            google.protobuf.Duration timeout = 3;
         }
         oneof Response {
             SimpleResponse simple = 1;
