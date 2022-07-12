@@ -13,13 +13,13 @@ exports.isService= function(object) {
   return true;
 }
 
-exports.getApisOfService = function(object) {
+exports.getApisOfService = function(object, params) {
   let apis = [];
   for (const key in object) {
     if (Object.hasOwnProperty.call(object, key)) {
       // 根据需要可以扩充字段
       const element = object[key];
-      apis.push({name: key, type: 'grpc_api', path: element.path, request: element.requestType.type.name, response: element.responseType.type.name});
+      apis.push({name: key, type: 'grpc_api', path: element.path, request: element.requestType.type.name, response: element.responseType.type.name, gid: params._id, aid: params.aid});
     }
   }
   return apis;
@@ -124,7 +124,7 @@ exports.getTreeOfProtoFile = async function(req, res) {
       if (exports.isService(element)) {
         // _id, aid, type
         let node = {name: key, children: [], type: 'grpc_service', gid: params._id, aid: params.aid};
-        let apis = exports.getApisOfService(element);
+        let apis = exports.getApisOfService(element, params);
         node.children = apis;
         tree.push(node);
       }
