@@ -9,8 +9,12 @@ const encoding = 'gbk';
 const binaryEncoding = 'binary';
 
 exports.getProto = async function (req, res) {
-  const content = fs.readFileSync(req.query.path);
-  return content;
+  try {
+    const content = fs.readFileSync(req.query.path);
+    return content;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 exports.getGrpcMock = async function (req, res) {
