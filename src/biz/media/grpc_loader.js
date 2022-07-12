@@ -35,7 +35,7 @@ function loopElement(type, messages) {
   });
 }
 
-exports.getMessagesOfPackageDefinition = function(packageDefinition) {
+function getMessagesOfPackageDefinition(packageDefinition) {
   let messages = {};
   for (const key in packageDefinition) {
     if (Object.hasOwnProperty.call(packageDefinition, key)) {
@@ -48,6 +48,51 @@ exports.getMessagesOfPackageDefinition = function(packageDefinition) {
     }
   }
   return messages;
+}
+
+const finished_key = 'finished_key';
+
+function doOne(_json, _messages, _key) {
+  message = _messages[_key];
+  let json = _json[_key] = {};
+  json[finished_key] = false;
+  for (const key in message) {
+    if (Object.hasOwnProperty.call(message, key)) {
+      const element = message[key];
+      if (element.type === 'TYPE_MESSAGE') {
+        const one = doOne(_json, _messages, element.typeName);
+        if (element.repeated){
+          json[key] = [one];
+        } else {
+          json[key] = one;
+        }
+      } else {
+        if (element.repeated){
+          json[key] = [""];
+        } else {
+          json[key] = "";
+        }
+      }
+    }
+  }
+  json[finished_key] = true;
+  return json;
+}
+function buildMessages2Json(messages) {
+  let json = {};
+  for (const key in messages) {
+    if (Object.hasOwnProperty.call(messages, key)) {
+      // 已经解析完的就不要再解析了
+      if (json[key] && json[key][finished_key]) {
+        continue;
+      }
+      doOne(json, messages, key);
+    }
+  }
+  for (const key in json) {
+    delete json[key][finished_key];
+  }
+  return JSON.stringify(json);
 }
 
 exports.getTreeOfProtoFile = async function(req, res) {
@@ -64,8 +109,9 @@ exports.getTreeOfProtoFile = async function(req, res) {
   let tree = [];
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
 
-  const messages = exports.getMessagesOfPackageDefinition(packageDefinition);
-  console.log(messages);
+  let messages = getMessagesOfPackageDefinition(packageDefinition);
+  let json = buildMessages2Json(messages);
+  console.log(json);
 
   // const grpcObject = grpcLibrary.loadPackageDefinition(packageDefinition);
   for (const key in packageDefinition) {
