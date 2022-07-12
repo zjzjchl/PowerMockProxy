@@ -1,7 +1,5 @@
 const protoLoader = require('@grpc/proto-loader');
-const grpcLibrary = require('@grpc/grpc-js');
-const protobufjs = require('protobufjs');
-const fs = require("fs");
+
 
 exports.isService= function(object) {
   for (const key in object) {
@@ -27,6 +25,16 @@ exports.getApisOfService = function(object) {
   return apis;
 }
 
+function loopElement(type, messages) {
+  let message = messages[type.name] = messages[type.name] ? messages[type.name] : {};
+  type.field.forEach(element=>{
+    message[element.name] =  {type: element.type, repeated: element.label === 'LABEL_REPEATED', typeName: element.typeName};
+    type.nestedType.forEach(nType=>{
+      loopElement(nType, messages);
+    });
+  });
+}
+
 exports.getMessagesOfPackageDefinition = function(packageDefinition) {
   let messages = {};
   for (const key in packageDefinition) {
@@ -36,8 +44,7 @@ exports.getMessagesOfPackageDefinition = function(packageDefinition) {
       if (!element.type){
         continue;
       }
-      const type = element.type;
-      console.log(type.field, type.name, type.nestedType);
+      loopElement(element.type, messages);
     }
   }
   return messages;
@@ -84,6 +91,9 @@ exports.getTreeOfProtoFile = async function(req, res) {
 
 // exports.getTreeOfProtoFile({query: { data: '{"_id":"b12665d2b48e499580458861","aid":"62c42ef4281c4d161217bb15","name":"apis.proto","path":"./public/resources/62c42ef4281c4d161217bb15/apis.proto","size":3049,"timestamp":1657173777706,"type":"grpc"}'}}, null);
 
+// const grpcLibrary = require('@grpc/grpc-js');
+// const protobufjs = require('protobufjs');
+// const fs = require("fs");
 // let Root = protobufjs.loadSync('./public/resources/62c42ef4281c4d161217bb15/apis.proto');
 // let Message = Root.lookupType("powermock.apis.v1alpha1.MockAPI");
 // const types = Message.toJSON();
