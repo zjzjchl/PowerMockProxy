@@ -52,15 +52,16 @@ function getMessagesOfPackageDefinition(packageDefinition) {
 
 const finished_key = 'finished_key';
 
-function doOne(_json, _messages, _key) {
-  message = _messages[_key];
+function doOne(_flag, _json, _messages, _key) {
+  let message = _messages[_key];
   let json = _json[_key] = {};
-  json[finished_key] = false;
+  let flag = _flag[_key] = {};
+  flag[finished_key] = false;
   for (const key in message) {
     if (Object.hasOwnProperty.call(message, key)) {
       const element = message[key];
       if (element.type === 'TYPE_MESSAGE') {
-        const one = doOne(_json, _messages, element.typeName);
+        let one = doOne(_flag, _json, _messages, element.typeName);
         if (element.repeated){
           json[key] = [one];
         } else {
@@ -75,22 +76,20 @@ function doOne(_json, _messages, _key) {
       }
     }
   }
-  json[finished_key] = true;
+  flag[finished_key] = true;
   return json;
 }
 function buildMessages2Json(messages) {
   let json = {};
+  let flag = {};
   for (const key in messages) {
     if (Object.hasOwnProperty.call(messages, key)) {
       // 已经解析完的就不要再解析了
-      if (json[key] && json[key][finished_key]) {
+      if (flag[key] && flag[key][finished_key]) {
         continue;
       }
-      doOne(json, messages, key);
+      doOne(flag, json, messages, key);
     }
-  }
-  for (const key in json) {
-    delete json[key][finished_key];
   }
   return JSON.stringify(json);
 }
