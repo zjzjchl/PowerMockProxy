@@ -19,7 +19,7 @@ exports.getApisOfService = function(object) {
     if (Object.hasOwnProperty.call(object, key)) {
       // 根据需要可以扩充字段
       const element = object[key];
-      apis.push({name: key, type: 'grpc_api', path: element.path});
+      apis.push({name: key, type: 'grpc_api', path: element.path, request: element.requestType.type.name, response: element.responseType.type.name});
     }
   }
   return apis;
@@ -110,7 +110,7 @@ exports.getTreeOfProtoFile = async function(req, res) {
 
   let messages = getMessagesOfPackageDefinition(packageDefinition);
   let json = buildMessages2Json(messages);
-  console.log(json);
+  // console.log(json);
 
   // const grpcObject = grpcLibrary.loadPackageDefinition(packageDefinition);
   for (const key in packageDefinition) {
@@ -131,7 +131,7 @@ exports.getTreeOfProtoFile = async function(req, res) {
     }
   }
   // console.log(JSON.stringify(tree));
-  return {tree, aid: params.aid, gid: params._id};
+  return {tree, aid: params.aid, gid: params._id, json};
 }
 
 // exports.getTreeOfProtoFile({query: { data: '{"_id":"b12665d2b48e499580458861","aid":"62c42ef4281c4d161217bb15","name":"apis.proto","path":"./public/resources/62c42ef4281c4d161217bb15/apis.proto","size":3049,"timestamp":1657173777706,"type":"grpc"}'}}, null);
