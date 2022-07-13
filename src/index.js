@@ -5,7 +5,7 @@ const express = require('express');
 const child_process = require('child_process');
 
 
-const { App, ApiGroup, Resource, GrpcLoader } = require('./biz/index');
+const { App, ApiGroup, Resource, GrpcLoader, GrpcApis } = require('./biz/index');
 
 const app = express();
 
@@ -125,6 +125,11 @@ app.post('/grpcmock', async (req, res)=>{
 app.get('/tree', async (req, res)=>{
     let tree = await GrpcLoader.getTreeOfProtoFile(req, res);
     res.json(tree);
+});
+
+app.post('/grpcrequest', async (req, res)=>{
+    let data = await GrpcApis.makeGrpcRequest(req, res);
+    res.json(data);
 });
 
 app.use(function (err, req, res, next) {
