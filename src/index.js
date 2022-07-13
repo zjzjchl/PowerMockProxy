@@ -2,6 +2,7 @@ const Config = require('config');
 const bodyParser = require('body-parser');
 const { expressjwt } = require('express-jwt');
 const express = require('express');
+const child_process = require('child_process');
 
 
 const { App, ApiGroup, Resource, GrpcLoader } = require('./biz/index');
@@ -146,4 +147,5 @@ app.use(function (err, req, res, next) {
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
+    child_process.spawn('node', [__dirname + '/biz/media/serve.js', JSON.stringify({})]);
 });
