@@ -5,7 +5,7 @@ const express = require('express');
 const child_process = require('child_process');
 
 
-const { App, ApiGroup, Resource, GrpcLoader, GrpcApis } = require('./biz/index');
+const { App, ApiGroup, Resource, GrpcLoader, GrpcApis, TestCase } = require('./biz/index');
 
 const app = express();
 
@@ -130,6 +130,32 @@ app.get('/tree', async (req, res)=>{
 app.post('/grpcrequest', async (req, res)=>{
     let data = await GrpcApis.makeGrpcRequest(req, res);
     res.json(data);
+});
+
+
+app.post('/testcase', async (req, res)=>{
+    await TestCase.addTestCase(req, res);
+    res.json(req.body);
+});
+
+app.get('/testcase', async (req, res)=>{
+    if (req.params.id) {
+        let record = await TestCase.getTestCase(req, res);
+        res.json(record);
+    } else {
+        let records = await TestCase.allTestCaseByParams(req, res);
+        res.json(records);
+    }
+});
+
+app.put('/testcase', async (req, res)=>{
+    await TestCase.updateTestCase(req, res);
+    res.json(req.body);
+});
+
+app.delete('/testcase', async (req, res)=>{
+    await TestCase.deleteTestCase(req, res);
+    res.json(req.body);
 });
 
 app.use(function (err, req, res, next) {
