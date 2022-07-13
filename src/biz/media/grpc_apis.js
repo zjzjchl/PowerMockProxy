@@ -1,22 +1,35 @@
-const protoLoader = require('@grpc/proto-loader');
+// const protoLoader = require('@grpc/proto-loader');
+const grpcLibrary = require('@grpc/grpc-js');
+const { ApiGroup } = require('../../biz/app/index');
+const iconv = require('iconv-lite');
+const encoding = 'gbk';
+const binaryEncoding = 'binary';
 
-
+// const options = {};
 
 exports.makeGrpcRequest = async function(req, res) {
   console.log(req.body);
-  let content = "read a book";
+  let content = {code: 2, error: '对应的记录不存在'};
+  let group = await ApiGroup.getAPiGroup({query: {id: req.body.gid}}, {});
+  if (group) {
+    // const packageDefinition = protoLoader.loadSync(group.path, options);
+    // const packageObject = grpcLibrary.loadPackageDefinition(packageDefinition); 
+    content = await new Promise((resolve, reject)=>{
+      const client = new grpcLibrary.Client('192.168.192.81:30002', grpcLibrary.credentials.createInsecure());
+      client.makeUnaryRequest(req.body.path, x=>x, x=>x, Buffer.from([]), (error, value)=>{
+        // console.log(error, value);
+        if (error) {
+          reject({code: 1});
+        } else {
+          const content = iconv.decode(Buffer.from(value, binaryEncoding), encoding);
+          resolve({code: 0, content: content});
+        }
+      });
+    });
+  //  console.log(content);
+  }
+
   return {aid: req.body.aid, gid: req.body.gid, path: req.body.path, content: content};
 }
-
-// exports.getTreeOfProtoFile({query: { data: '{"_id":"b12665d2b48e499580458861","aid":"62c42ef4281c4d161217bb15","name":"apis.proto","path":"./public/resources/62c42ef4281c4d161217bb15/apis.proto","size":3049,"timestamp":1657173777706,"type":"grpc"}'}}, null);
-
-// const grpcLibrary = require('@grpc/grpc-js');
-// const protobufjs = require('protobufjs');
-// const fs = require("fs");
-// let Root = protobufjs.loadSync('./public/resources/62c42ef4281c4d161217bb15/apis.proto');
-// let Message = Root.lookupType("powermock.apis.v1alpha1.MockAPI");
-// const types = Message.toJSON();
-
-// console.log(types);
 
 
