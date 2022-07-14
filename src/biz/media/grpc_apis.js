@@ -1,3 +1,4 @@
+const moment = require('moment');
 const grpcLibrary = require('@grpc/grpc-js');
 const { ApiGroup } = require('../../biz/app/index');
 
@@ -24,7 +25,7 @@ exports.makeGrpcRequest = async function(req, res) {
     }
   }
   console.log(content);
-  return {aid: req.body.aid, gid: req.body.gid, path: req.body.path, content: content};
+  return {aid: req.body.aid, gid: req.body.gid, path: req.body.path, content: content, timestamp: moment().format('yyyy MM-DD HH:mm:ss')};
 }
 
 
