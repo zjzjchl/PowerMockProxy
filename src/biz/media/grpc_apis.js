@@ -25,7 +25,8 @@ exports.makeGrpcRequest = async function(req, res) {
     }
   }
   console.log(content);
-  return {aid: req.body.aid, gid: req.body.gid, path: req.body.path, content: content, timestamp: moment().format('yyyy MM-DD HH:mm:ss')};
+  content.timestamp = moment().format('yyyy MM-DD HH:mm:ss');
+  return {aid: req.body.aid, gid: req.body.gid, path: req.body.path, content: content};
 }
 
 

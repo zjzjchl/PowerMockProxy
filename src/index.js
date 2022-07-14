@@ -155,7 +155,7 @@ app.put('/testcase', async (req, res)=>{
 
 app.delete('/testcase', async (req, res)=>{
     await TestCase.deleteTestCase(req, res);
-    res.json(req.body);
+    res.json(req.query);
 });
 
 app.use(function (err, req, res, next) {

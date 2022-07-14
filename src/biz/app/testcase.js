@@ -16,7 +16,7 @@ exports.updateTestCase = async function (req, res) {
 
 exports.deleteTestCase = async function (req, res) {
   let dao = new TestCaseDao();
-  await dao.delete(req.body);
+  await dao.delete(req.query);
 };
 
 exports.allTestCaseByParams = async function (req, res) {
