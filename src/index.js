@@ -5,7 +5,7 @@ const express = require('express');
 const child_process = require('child_process');
 
 
-const { App, ApiGroup, Resource, GrpcLoader, GrpcApis, TestCase } = require('./biz/index');
+const { App, ApiGroup, Resource, GrpcLoader, GrpcApis, TestCase, Env } = require('./biz/index');
 
 const app = express();
 
@@ -139,7 +139,7 @@ app.post('/testcase', async (req, res)=>{
 });
 
 app.get('/testcase', async (req, res)=>{
-    if (req.params.id) {
+    if (req.query.id) {
         let record = await TestCase.getTestCase(req, res);
         res.json(record);
     } else {
@@ -155,6 +155,26 @@ app.put('/testcase', async (req, res)=>{
 
 app.delete('/testcase', async (req, res)=>{
     await TestCase.deleteTestCase(req, res);
+    res.json(req.query);
+});
+
+app.post('/env', async (req, res)=>{
+    await Env.addEnv(req, res);
+    res.json(req.body);
+});
+
+app.get('/env', async (req, res)=>{
+    let records = await Env.allEnv(req, res);
+    res.json(records);
+});
+
+app.put('/env', async (req, res)=>{
+    await Env.updateEnv(req, res);
+    res.json(req.body);
+});
+
+app.delete('/env', async (req, res)=>{
+    await Env.deleteEnv(req, res);
     res.json(req.query);
 });
 
