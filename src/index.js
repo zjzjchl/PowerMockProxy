@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const { expressjwt } = require('express-jwt');
 const express = require('express');
 const child_process = require('child_process');
-
+const CloudMock = require('config').get('cloud-mock');
 
 const { App, ApiGroup, Resource, GrpcLoader, GrpcApis, TestCase, Env } = require('./biz/index');
 
@@ -165,7 +165,7 @@ app.post('/env', async (req, res)=>{
 
 app.get('/env', async (req, res)=>{
     let records = await Env.allEnv(req, res);
-    res.json(records);
+    res.json([...records, CloudMock]);
 });
 
 app.put('/env', async (req, res)=>{

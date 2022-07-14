@@ -5,5 +5,11 @@
   },
   "jwt-secret": "ac20556f2f6166f8a9c257c4ceaa7c19",
   "resources-folder-base-path": "./public/resources",
-  "proto-base-path": "/root/PowerMockProxy"
+  "proto-base-path": "/root/PowerMockProxy",
+  "cloud-mock":  {
+    "name": "云端Mock",
+    "desc": "默认的云端Mock",
+    "url": "http://192.168.192.81:30002",
+    "readonly": true
+  }
 }
