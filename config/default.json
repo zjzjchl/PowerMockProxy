@@ -10,6 +10,7 @@
     "name": "云端Mock",
     "desc": "默认的云端Mock",
     "url": "http://192.168.192.81:30002",
-    "readonly": true
+    "readonly": true,
+    "value": "cloud"
   }
 }

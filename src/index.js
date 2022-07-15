@@ -42,7 +42,7 @@ app.all('*', Authentication(), function (req, res, next) {
     // res.set("Access-Control-Allow-Origin", "http://www.xxx.net:3000");
     res.set("Access-Control-Allow-Origin", "*");
   
-    res.set("Access-Control-Allow-Methods", "POST,OPTIONS,DELETE");
+    res.set("Access-Control-Allow-Methods", "POST,OPTIONS,DELETE,PUT,GET");
     res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.set("Access-Control-Allow-Credentials", "true");
     res.set("Access-Control-Expose-Headers", "Authorization");
