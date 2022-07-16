@@ -99,7 +99,8 @@ app.put('/apigroup', async (req, res)=>{
 });
 
 app.delete('/apigroup', async (req, res)=>{
-    
+    await ApiGroup.deleteApiGroup(req, res);
+    res.json(req.query);
 });
 
 
