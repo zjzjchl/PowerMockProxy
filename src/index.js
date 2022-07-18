@@ -133,6 +133,11 @@ app.post('/grpcrequest', async (req, res)=>{
     res.json(data);
 });
 
+app.post('/quicklygrpcrequest', async (req, res)=>{
+    let data = await GrpcApis.makeGrpcRequest(req, res);
+    res.json(data);
+});
+
 
 app.post('/testcase', async (req, res)=>{
     await TestCase.addTestCase(req, res);
