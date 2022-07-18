@@ -1,7 +1,9 @@
+const iconv = require('iconv-lite');
 const moment = require('moment');
 const grpcLibrary = require('@grpc/grpc-js');
 const { ApiGroup } = require('../../biz/app/index');
-
+const encoding = 'gbk';
+const binaryEncoding = 'binary';
 
 exports.makeGrpcRequest = async function(req, res) {
   console.log(req.body);
@@ -11,8 +13,12 @@ exports.makeGrpcRequest = async function(req, res) {
     try {
       content = await new Promise((resolve, reject)=>{
         const client = new grpcLibrary.Client('192.168.192.81:30002', grpcLibrary.credentials.createInsecure());
-        client.makeUnaryRequest(req.body.path, x=>x, x=>x, Buffer.from([]), (error, value)=>{
-          // console.log(error, value);
+        const metadata = new grpcLibrary.Metadata();
+        metadata.set('uid', 2000);
+        client.makeUnaryRequest(req.body.path, x=>x, x=>x, Buffer.from([]), metadata, (error, value)=>{
+          console.log(Buffer.from(value, binaryEncoding).toString())
+          const content = iconv.decode(Buffer.from(value, binaryEncoding), encoding);
+          console.log(error, content);
           if (error) {
             reject({code: 1, error: 'powermock rpc调用失败', message: error});
           } else {

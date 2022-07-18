@@ -22,7 +22,7 @@ exports.updateApiGroup = async function (req, res) {
 
 exports.deleteApiGroup = async function (req, res) {
   let dao = new ApiGroupDao();
-  await dao.delete(req.body);
+  await dao.delete(req.query);
 };
 
 exports.allApiGroupByParams = async function (req, res) {

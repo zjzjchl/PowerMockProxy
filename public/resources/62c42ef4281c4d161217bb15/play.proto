@@ -12,5 +12,7 @@ message PlayPingPongRequest {
 }
 
 message PlayPingPongResponse {
+    uint64 timestamp = 1;
     string message = 2;
+    float amount = 3;
 }
