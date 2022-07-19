@@ -14,9 +14,16 @@ exports.makeGrpcRequest = async function(req, res) {
       content = await new Promise((resolve, reject)=>{
         const client = new grpcLibrary.Client('192.168.192.81:30002', grpcLibrary.credentials.createInsecure());
         const metadata = new grpcLibrary.Metadata();
-        metadata.set('uid', 2000);
-        client.makeUnaryRequest(req.body.path, x=>x, x=>x, Buffer.from([]), metadata, (error, value)=>{
-          console.log(Buffer.from(value, binaryEncoding).toString())
+        if (req.body.metadata) {
+          for (const key in req.body.metadata) {
+            if (Object.hasOwnProperty.call(req.body.metadata, key)) {
+              metadata.set(key, req.body.metadata[key]);
+            }
+          }
+        }
+        // metadata.set('uid', 2000);
+        const interceptors = [];
+        client.makeUnaryRequest(req.body.path, x=>x, x=>x, Buffer.from([]), metadata, {interceptors: interceptors}, function (error, value){
           const content = iconv.decode(Buffer.from(value, binaryEncoding), encoding);
           console.log(error, content);
           if (error) {
