@@ -18,7 +18,8 @@ exports.getProto = async function (req, res) {
 }
 
 exports.getGrpcMock = async function (req, res) {
-  let path = req.query.path.replace('.proto', '.yaml');
+  let group = await ApiGroup.getAPiGroup({query: {id: req.query.gid}}, {});
+  let path = group.path.replace('.proto', `-${req.query.name}.yaml`);
   if (!fs.existsSync(path)) {
     fs.writeFileSync(path, "");
   }
@@ -27,7 +28,8 @@ exports.getGrpcMock = async function (req, res) {
 }
 
 exports.addGrpcMock = async function (req, res) {
-  let path = req.body.path.replace('.proto', '.yaml');
+  let group = await ApiGroup.getAPiGroup({query: {id: req.body.gid}}, {});
+  let path = group.path.replace('.proto', `-${req.body.name}.yaml`);
   if (!fs.existsSync(path)) {
     fs.writeFileSync(path, "");
   }
